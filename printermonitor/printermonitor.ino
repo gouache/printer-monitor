@@ -49,7 +49,7 @@ SOFTWARE.
 #if defined(DISPLAY_SH1106)
   SH1106Wire     display(I2C_DISPLAY_ADDRESS, SDA_PIN, SCL_PIN);
 #else
-  SSD1306Wire     display(I2C_DISPLAY_ADDRESS, SDA_PIN, SCL_PIN); // this is the default
+  SSD1306Wire     display(I2C_DISPLAY_ADDRESS, SDA_PIN, SCL_PIN, GEOMETRY_128_32); // this is the default
 #endif
 
 OLEDDisplayUi   ui( &display );
@@ -219,10 +219,11 @@ void setup() {
   display.display();
 
   //display.flipScreenVertically();
-  display.setFont(ArialMT_Plain_16);
+  display.setFont(ArialMT_Plain_10);
   display.setTextAlignment(TEXT_ALIGN_CENTER);
   display.setContrast(255); // default is 255
-  display.drawString(64, 5, "Printer Monitor\nBy Qrome\nV" + String(VERSION));
+  //display.drawString(64, 0, "Printer Monitor\nBy Qrome\nV" + String(VERSION));
+  display.drawString(64, 0, "Printer Monitor\nBy Qrome");
   display.display();
 
   //WiFiManager
@@ -310,11 +311,11 @@ void setup() {
     display.clear();
     display.setTextAlignment(TEXT_ALIGN_CENTER);
     display.setFont(ArialMT_Plain_10);
-    display.drawString(64, 10, "Web Interface On");
-    display.drawString(64, 20, "You May Connect to IP");
-    display.setFont(ArialMT_Plain_16);
-    display.drawString(64, 30, WiFi.localIP().toString());
-    display.drawString(64, 46, "Port: " + String(WEBSERVER_PORT));
+    //display.drawString(64, 10, "Web Interface On");
+    display.drawString(64, 0, "You May Connect to IP");
+    display.setFont(ArialMT_Plain_10);
+    display.drawString(64, 10, WiFi.localIP().toString());
+    display.drawString(64, 20, "Port: " + String(WEBSERVER_PORT));
     display.display();
   } else {
     Serial.println("Web Interface is Disabled");
@@ -831,17 +832,17 @@ void drawScreen1(OLEDDisplay *display, OLEDDisplayUiState* state, int16_t x, int
   String bed = printerClient.getValueRounded(printerClient.getTempBedActual());
   String tool = printerClient.getValueRounded(printerClient.getTempToolActual());
   display->setTextAlignment(TEXT_ALIGN_CENTER);
-  display->setFont(ArialMT_Plain_16);
+  display->setFont(ArialMT_Plain_10);
   if (bed != "0") {
     display->drawString(64 + x, 0 + y, "Bed / Tool Temp");
   } else {
     display->drawString(64 + x, 0 + y, "Tool Temp");
   }
   display->setTextAlignment(TEXT_ALIGN_LEFT);
-  display->setFont(ArialMT_Plain_24);
+  display->setFont(ArialMT_Plain_16);
   if (bed != "0") {
     display->setTextAlignment(TEXT_ALIGN_LEFT);
-    display->drawString(2 + x, 14 + y, bed + "°");
+    display->drawString(32 + x, 14 + y, bed + "°");
     display->drawString(64 + x, 14 + y, tool + "°");
   } else {
     display->setTextAlignment(TEXT_ALIGN_CENTER);
@@ -851,11 +852,11 @@ void drawScreen1(OLEDDisplay *display, OLEDDisplayUiState* state, int16_t x, int
 
 void drawScreen2(OLEDDisplay *display, OLEDDisplayUiState* state, int16_t x, int16_t y) {
   display->setTextAlignment(TEXT_ALIGN_CENTER);
-  display->setFont(ArialMT_Plain_16);
+  display->setFont(ArialMT_Plain_10);
 
   display->drawString(64 + x, 0 + y, "Time Remaining");
   //display->setTextAlignment(TEXT_ALIGN_LEFT);
-  display->setFont(ArialMT_Plain_24);
+  display->setFont(ArialMT_Plain_16);
   int val = printerClient.getProgressPrintTimeLeft().toInt();
   int hours = numberOfHours(val);
   int minutes = numberOfMinutes(val);
@@ -867,11 +868,11 @@ void drawScreen2(OLEDDisplay *display, OLEDDisplayUiState* state, int16_t x, int
 
 void drawScreen3(OLEDDisplay *display, OLEDDisplayUiState* state, int16_t x, int16_t y) {
   display->setTextAlignment(TEXT_ALIGN_CENTER);
-  display->setFont(ArialMT_Plain_16);
+  display->setFont(ArialMT_Plain_10);
 
   display->drawString(64 + x, 0 + y, "Printing Time");
   //display->setTextAlignment(TEXT_ALIGN_LEFT);
-  display->setFont(ArialMT_Plain_24);
+  display->setFont(ArialMT_Plain_16);
   int val = printerClient.getProgressPrintTime().toInt();
   int hours = numberOfHours(val);
   int minutes = numberOfMinutes(val);
@@ -888,21 +889,21 @@ void drawClock(OLEDDisplay *display, OLEDDisplayUiState* state, int16_t x, int16
   if (IS_24HOUR) {
     displayTime = timeClient.getHours() + ":" + timeClient.getMinutes() + ":" + timeClient.getSeconds(); 
   }
-  display->setFont(ArialMT_Plain_16);
+  display->setFont(ArialMT_Plain_10);
   display->drawString(64 + x, 0 + y, OctoPrintHostName);
-  display->setFont(ArialMT_Plain_24);
-  display->drawString(64 + x, 17 + y, displayTime);
+  display->setFont(ArialMT_Plain_16);
+  display->drawString(64 + x, 10 + y, displayTime);
 }
 
 void drawWeather(OLEDDisplay *display, OLEDDisplayUiState* state, int16_t x, int16_t y) {
   display->setTextAlignment(TEXT_ALIGN_LEFT);
-  display->setFont(ArialMT_Plain_24);
+  display->setFont(ArialMT_Plain_16);
   display->drawString(0 + x, 0 + y, weatherClient.getTempRounded(0) + getTempSymbol());
   display->setTextAlignment(TEXT_ALIGN_LEFT);
-  display->setFont(ArialMT_Plain_24);
-
   display->setFont(ArialMT_Plain_16);
-  display->drawString(0 + x, 24 + y, weatherClient.getCondition(0));
+
+  display->setFont(ArialMT_Plain_10);
+  display->drawString(0 + x, 14 + y, weatherClient.getCondition(0));
   display->setFont((const uint8_t*)Meteocons_Plain_42);
   display->drawString(86 + x, 0 + y, weatherClient.getWeatherIcon(0));
 }
@@ -942,7 +943,7 @@ String zeroPad(int value) {
 
 void drawHeaderOverlay(OLEDDisplay *display, OLEDDisplayUiState* state) {
   display->setColor(WHITE);
-  display->setFont(ArialMT_Plain_16);
+  display->setFont(ArialMT_Plain_10);
   String displayTime = timeClient.getAmPmHours() + ":" + timeClient.getMinutes();
   if (IS_24HOUR) {
     displayTime = timeClient.getHours() + ":" + timeClient.getMinutes();
@@ -974,7 +975,7 @@ void drawHeaderOverlay(OLEDDisplay *display, OLEDDisplayUiState* state) {
 
 void drawClockHeaderOverlay(OLEDDisplay *display, OLEDDisplayUiState* state) {
   display->setColor(WHITE);
-  display->setFont(ArialMT_Plain_16);
+  display->setFont(ArialMT_Plain_10);
   display->setTextAlignment(TEXT_ALIGN_LEFT);
   if (!IS_24HOUR) {
     display->drawString(0, 48, timeClient.getAmPm());
