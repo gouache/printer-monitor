@@ -133,3 +133,7 @@ Thanks for your contribution.
 ![Printer Monitor Temps](/images/temperatures.jpg)  
 ![Printer Monitor Time Remaining](/images/time_remaining.jpg)  
 ![Printer Monitor Printing Time](/images/printing_time.jpg)
+
+![128x32 LCD - Temps](/images/clip1.jpg)
+![128x32 LCD - Time Remaining](/images/clip2.jpg)
+![128x32 LCD - Printing Time](/images/clip3.jpg)
